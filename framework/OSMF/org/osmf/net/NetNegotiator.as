@@ -333,7 +333,17 @@ package org.osmf.net
 
 							NetConnection(event.target).call("FCSubscribe", null, streamItems[i].streamName);
 						}
-					}
+					} else if (this.resource is StreamingURLResource) {
+						var urlResource:StreamingURLResource = this.resource as StreamingURLResource;
+                        var streamName:String = new FMSURL(urlResource.url, urlResource.urlIncludesFMSApplicationInstance).streamName;
+
+                        CONFIG::LOGGING
+                        {
+                            logger.debug("FCSubscribe: " + streamName);
+                        }
+                        
+                        NetConnection(event.target).call("FCSubscribe", null, streamName);
+                    }
 
 					shutDownUnsuccessfulConnections();
 

@@ -74,6 +74,7 @@ package org.osmf.net
 		 * case there is no instance name and the stream would be 'foo/bar/stream'.
 		 * The default is false.
 		 * @param drmContentData Content metadata for DRM-encrypted content.
+		 * @param proxyType Determines which fallback methods are tried if an initial connection attempt to Flash Media Server fails.
 		 *  
 		 *  @langversion 3.0
 		 *  @playerversion Flash 10
@@ -87,7 +88,8 @@ package org.osmf.net
 							, clipEndTime:Number = NaN
 							, connectionArguments:Vector.<Object> = null
 							, urlIncludesFMSApplicationInstance:Boolean = false
-							, drmContentData:ByteArray = null							 
+							, drmContentData:ByteArray = null					 
+							, proxyType:String = "none"					 
 							)
 		{
 			_streamType = streamType || StreamType.RECORDED;
@@ -95,6 +97,7 @@ package org.osmf.net
 			_clipEndTime = clipEndTime;
 			_urlIncludesFMSApplicationInstance = urlIncludesFMSApplicationInstance;
 			_drmContentData = drmContentData;
+			_proxyType = proxyType;
 			
 			_connectionArguments = connectionArguments;
 			
@@ -208,6 +211,19 @@ package org.osmf.net
 		}
 
 		/**
+		 * Determines which fallback methods are tried if an initial connection attempt to Flash Media Server fails.
+		 **/ 
+		public function get proxyType():String
+		{
+			return _proxyType;
+		}
+
+		public function set proxyType(value:String):void
+		{
+			_proxyType = value;
+		}
+
+		/**
 		 * Indicates, for RTMP streaming URLs, whether the URL includes the FMS
 		 * application instance or not.  If true, then the second part of the URL
 		 * path is considered the instance name, such as <code>rtmp://host/app/foo/bar/stream</code>.
@@ -255,6 +271,7 @@ package org.osmf.net
 		private var _clipEndTime:Number;
 		private var _connectionArguments:Vector.<Object>;
 		private var _drmContentData:ByteArray;
+		private var _proxyType:String;
 		private var _urlIncludesFMSApplicationInstance:Boolean = false;
 
 		private var _alternativeAudioStreamItems:Vector.<StreamingItem> = null;

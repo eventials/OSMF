@@ -165,12 +165,13 @@ package org.osmf.net
 				pendingDictionary[key] = pendingConnections;
 				
 				// Set up our URLs and NetConnections
-				var urlIncludesFMSApplicationInstance:Boolean = resource is StreamingURLResource ? StreamingURLResource(resource).urlIncludesFMSApplicationInstance : false 
-				var netConnectionURLs:Vector.<String> = createNetConnectionURLs(resource.url, urlIncludesFMSApplicationInstance);
+				var urlIncludesFMSApplicationInstance:Boolean = resource is StreamingURLResource ? StreamingURLResource(resource).urlIncludesFMSApplicationInstance : false;
+                var proxyType:String = resource is StreamingURLResource ? StreamingURLResource(resource).proxyType : "none";
+                var netConnectionURLs:Vector.<String> = createNetConnectionURLs(resource.url, urlIncludesFMSApplicationInstance);
 				var netConnections:Vector.<NetConnection> = new Vector.<NetConnection>();
 				for (var j:int = 0; j < netConnectionURLs.length; j++)
 				{
-					netConnections.push(createNetConnection());
+					netConnections.push(createNetConnection(proxyType));
 				} 
 				
 				// Perform the connection attempt
@@ -341,9 +342,14 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		protected function createNetConnection():NetConnection
+		protected function createNetConnection(proxyType:String):NetConnection
 		{
-			return new NetConnection();
+			var nc:NetConnection = new NetConnection();
+            
+            // set the custom proxy type.
+            nc.proxyType = proxyType;
+
+            return nc;
 		}
 
 		/**
