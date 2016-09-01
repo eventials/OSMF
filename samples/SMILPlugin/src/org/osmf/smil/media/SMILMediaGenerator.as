@@ -45,8 +45,8 @@ package org.osmf.smil.media
 
 	CONFIG::LOGGING
 	{
-	import org.osmf.logging.Logger;
-	import org.osmf.logging.Log;
+		import org.osmf.logging.Logger;
+		import org.osmf.logging.Log;
 	}
 
 	/**
@@ -97,8 +97,8 @@ package org.osmf.smil.media
 			{
 				case SMILElementType.SWITCH:
 					var initialIndex:int = originalResource.getMetadataValue(MetadataNamespaces.RESOURCE_INITIAL_INDEX) as int;
-
-					mediaResource = createDynamicStreamingResource(smilElement, smilDocument, initialIndex);
+					var switchRules:Object = originalResource.getMetadataValue(MetadataNamespaces.RESOURCE_INITIAL_SWITCH_RULES) as Object;
+					mediaResource = createDynamicStreamingResource(smilElement, smilDocument, initialIndex, switchRules);
 					break;
 				case SMILElementType.PARALLEL:
 					var parallelElement:ParallelElement = new ParallelElement();
@@ -116,7 +116,7 @@ package org.osmf.smil.media
 					var smilVideoElement:SMILMediaElement = smilElement as SMILMediaElement;
 
 					if (!isNaN(smilVideoElement.clipBegin) && smilVideoElement.clipBegin > 0 &&
-					    !isNaN(smilVideoElement.clipEnd) && smilVideoElement.clipEnd > 0)
+						!isNaN(smilVideoElement.clipEnd) && smilVideoElement.clipEnd > 0)
 					{
 						resource.clipStartTime = smilVideoElement.clipBegin;
 						resource.clipEndTime = smilVideoElement.clipEnd;
@@ -197,7 +197,7 @@ package org.osmf.smil.media
 			return mediaElement;
 		}
 
-		private function createDynamicStreamingResource(switchElement:SMILElement, smilDocument:SMILDocument, initialIndex:int):MediaResourceBase
+		private function createDynamicStreamingResource(switchElement:SMILElement, smilDocument:SMILDocument, initialIndex:int, switchRules:Object):MediaResourceBase
 		{
 			var dsr:DynamicStreamingResource = null;
 			var hostURL:String;
@@ -211,7 +211,7 @@ package org.osmf.smil.media
 						hostURL = (smilElement as SMILMetaElement).base;
 						if (hostURL != null)
 						{
-							dsr = createDynamicStreamingItems(switchElement, hostURL, initialIndex);
+							dsr = createDynamicStreamingItems(switchElement, hostURL, initialIndex, switchRules);
 						}
 						break;
 				}
@@ -220,7 +220,7 @@ package org.osmf.smil.media
 			return dsr;
 		}
 
-		private function createDynamicStreamingItems(switchElement:SMILElement, hostURL:String, initialIndex:int):DynamicStreamingResource
+		private function createDynamicStreamingItems(switchElement:SMILElement, hostURL:String, initialIndex:int, switchRules:Object):DynamicStreamingResource
 		{
 			var dsr:DynamicStreamingResource = null;
 			var streamItems:Vector.<DynamicStreamingItem> = new Vector.<DynamicStreamingItem>();
@@ -232,9 +232,9 @@ package org.osmf.smil.media
 				{
 					var videoElement:SMILMediaElement = smilElement as SMILMediaElement;
 
-					// We need to divide the bitrate by 1000 because the DynamicStreamingItem class
+					// We need to divide the bitrate by 1024 because the DynamicStreamingItem class
 					// requires the bitrate in kilobits per second.
-					var dsi:DynamicStreamingItem = new DynamicStreamingItem(videoElement.src, videoElement.bitrate/1000);
+					var dsi:DynamicStreamingItem = new DynamicStreamingItem(videoElement.src, videoElement.bitrate/1024);
 					streamItems.push(dsi);
 				}
 			}
@@ -247,11 +247,13 @@ package org.osmf.smil.media
 				dsr.streamItems = streamItems;
 				dsr.streamType = StreamType.LIVE_OR_RECORDED;
 				dsr.initialIndex = initialIndex < maxIndex ? initialIndex : maxIndex;
+				if (switchRules) {
+					dsr.switchRules = switchRules;
+				}
 			}
 
 			return dsr;
 		}
-
 
 		private function traceElements(smilDocument:SMILDocument):void
 		{
