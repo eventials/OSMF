@@ -1,33 +1,33 @@
 /*****************************************************
-*  
+*
 *  Copyright 2009 Adobe Systems Incorporated.  All Rights Reserved.
-*  
+*
 *****************************************************
 *  The contents of this file are subject to the Mozilla Public License
 *  Version 1.1 (the "License"); you may not use this file except in
 *  compliance with the License. You may obtain a copy of the License at
 *  http://www.mozilla.org/MPL/
-*   
+*
 *  Software distributed under the License is distributed on an "AS IS"
 *  basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 *  License for the specific language governing rights and limitations
 *  under the License.
-*   
-*  
+*
+*
 *  The Initial Developer of the Original Code is Adobe Systems Incorporated.
-*  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems 
-*  Incorporated. All Rights Reserved. 
-*  
+*  Portions created by Adobe Systems Incorporated are Copyright (C) 2009 Adobe Systems
+*  Incorporated. All Rights Reserved.
+*
 *****************************************************/
 package org.osmf.metadata
 {
 	[ExcludeClass]
-	
+
 	/**
 	 * @private
-	 * 
+	 *
 	 * Contains the static constants for metadata namespaces used within OSMF.
-	 * 
+	 *
 	 *  @langversion 3.0
 	 *  @playerversion Flash 10
 	 *  @playerversion AIR 1.5
@@ -55,7 +55,7 @@ package org.osmf.metadata
 
 		/**
 		 * @private
-		 * 
+		 *
 		 * Used by the layout system to log individual IDs of regions.  For debugging only.
 		 **/
 		public static const ELEMENT_ID:String	 						= "http://www.osmf.org/layout/elementId/1.0";
@@ -99,17 +99,17 @@ package org.osmf.metadata
 		 * @private
 		 **/
 		public static const BOX_LAYOUT_ATTRIBUTES:String				= "http://www.osmf.org/layout/attributes/box/1.0";
-		
+
 		/**
 		 * @private
 		 **/
 		public static const DRM_METADATA:String							= "http://www.osmf.org/drm/1.0";
-		
+
 		/**
 		 * @private
 		 **/
 		public static const MULTICAST_INFO:String						= "http://www.osmf.org/multicast/info/1.0";
-		
+
 		/**
 		 * @private
 		 **/
@@ -129,7 +129,7 @@ package org.osmf.metadata
 		 * @private
 		 **/
 		public static const HTTP_STREAMING_METADATA:String				= "http://www.osmf.org/httpstreaming/1.0";
-		
+
 		/**
 		 * @private
 		 **/
@@ -174,32 +174,34 @@ package org.osmf.metadata
 		 * @private
 		 **/
 		public static const HTTP_STREAMING_DVR_ID_KEY:String 					= "dvrId";
-		
+
 		/**
 		 * @private
 		 **/
 		public static const RESOURCE_INITIAL_INDEX:String 					= "resourceInitialIndex";
-		
+
+		public static const RESOURCE_INITIAL_SWITCH_RULES:String = "resourceInitialSwitchRules";
+
 		/**
 		 * @private
 		 **/
 		public static const BEST_EFFORT_FETCH_METADATA:String = "http://www.osmf.org/bestEffortFetch/1.0";
-		
+
 		/**
 		 * @private
 		 **/
 		public static const HTTP_STREAMING_BEST_EFFORT_FETCH_MAX_FORWARD_FETCHES:String = "bestEffortFetchMaxForwardFetches";
-		
+
 		/**
 		 * @private
 		 **/
 		public static const HTTP_STREAMING_BEST_EFFORT_FETCH_MAX_BACKWARD_FETCHES:String = "bestEffortFetchMaxBackwardFetches";
-		
+
 		/**
 		 * @private
 		 **/
 		public static const HTTP_STREAMING_BEST_EFFORT_FETCH_SEGMENT_DURATION:String = "bestEffortFetchSegmentDuration";
-		
+
 		/**
 		 * @private
 		 **/

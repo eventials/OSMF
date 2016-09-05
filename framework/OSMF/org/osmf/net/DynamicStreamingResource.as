@@ -29,8 +29,8 @@ package org.osmf.net
 
 	CONFIG::LOGGING
 	{
-	import org.osmf.logging.Logger;
-	import org.osmf.logging.Log;
+		import org.osmf.logging.Logger;
+		import org.osmf.logging.Log;
 	}
 
 	/**
@@ -65,11 +65,33 @@ package org.osmf.net
 		 *  @playerversion AIR 1.5
 		 *  @productversion OSMF 1.0
 		 */
-		public function DynamicStreamingResource(host:String, streamType:String=null)
+		public function DynamicStreamingResource(host:String, streamType:String=null, switchRules:Object=null)
 		{
 			super(host, streamType);
 
 			_initialIndex = 0;
+
+			if (switchRules != null) {
+				_switchRules = switchRules;
+			} else {
+				_switchRules = {
+					"SufficientBandwidthRule": {
+						"bandwidthSafetyMultiple": 1.15,
+						"minDroppedFps": 2
+					},
+					"InsufficientBufferRule": {
+						"minBufferLength": 2
+					},
+					"DroppedFramesRule": {
+						"downSwitchByOne": 10,
+						"downSwitchByTwo": 20,
+						"downSwitchToZero": 24
+					},
+					"InsufficientBandwidthRule": {
+						"bitrateMultiplier": 1.15
+					}
+				};
+			}
 		}
 
 		/**
@@ -145,6 +167,27 @@ package org.osmf.net
 			return _initialIndex;
 		}
 
+		/**
+		 * @private
+		 * Rules used to control how switching stream quality
+		 *
+		 *
+		*/
+		public function get switchRules():Object
+		{
+			return _switchRules;
+		}
+
+		public function set switchRules(value:Object):void
+		{
+			if (value == null)
+			{
+				throw new Error("value must *not* be null")
+			}
+
+			_switchRules = value;
+		}
+
 		public function set initialIndex(value:int):void
 		{
 			if (_streamItems == null || value >= _streamItems.length)
@@ -154,7 +197,6 @@ package org.osmf.net
 
 			_initialIndex = value;
 		}
-
 
 		/**
 		 * @private
@@ -183,27 +225,26 @@ package org.osmf.net
 			return -1;
 		}
 
-		// Internals
-		//
+		/** Internals */
 		private function endsWith(source:String, value:String):Boolean
-	    {
-	        return source.lastIndexOf(value) == ( source.length - value.length ) ;
-	    };
+		{
+			return source.lastIndexOf(value) == ( source.length - value.length ) ;
+		}
 
 		/**
 		 * A comparison method that determines the behavior of the sort of the vector member variable.
 		 * Given two elements a and b, the function returns one of the following three values:
 		 * <ol>
-	     * <li>a negative number, if a should appear before b in the sorted sequence</li>
-    	 * <li>0, if a equals b</li>
-    	 * <li>a positive number, if a should appear after b in the sorted sequence</li>
-    	 * </ol>
-    	 *
-    	 *  @langversion 3.0
-    	 *  @playerversion Flash 10
-    	 *  @playerversion AIR 1.5
-    	 *  @productversion OSMF 1.0
-    	 */
+		 * <li>a negative number, if a should appear before b in the sorted sequence</li>
+		 * <li>0, if a equals b</li>
+		 * <li>a positive number, if a should appear after b in the sorted sequence</li>
+		 * </ol>
+		 *
+		 *  @langversion 3.0
+		 *  @playerversion Flash 10
+		 *  @playerversion AIR 1.5
+		 *  @productversion OSMF 1.0
+		 */
 		private function compareStreamItems(a:DynamicStreamingItem, b:DynamicStreamingItem):Number
 		{
 			var result:Number = -1;
@@ -222,6 +263,7 @@ package org.osmf.net
 
 		private var _streamItems:Vector.<DynamicStreamingItem>;
 		private var _initialIndex:int;
+		private var _switchRules:Object;
 
 		CONFIG::LOGGING
 		{
